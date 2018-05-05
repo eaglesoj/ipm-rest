@@ -11,6 +11,14 @@ data=${3}
 # get config
 . ${config}
 
+# remove any leading slash from uri
+if [ "x$uri" != "x" ]; then
+	if [[ $uri == /* ]]; then
+		uri=${uri#"/"}
+		echo "uri is ${uri}"
+	fi 	
+fi
+
 # make request
 
 # no payload
