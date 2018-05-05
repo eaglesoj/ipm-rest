@@ -15,7 +15,6 @@ data=${3}
 if [ "x$uri" != "x" ]; then
 	if [[ $uri == /* ]]; then
 		uri=${uri#"/"}
-		echo "uri is ${uri}"
 	fi 	
 fi
 
