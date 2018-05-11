@@ -22,10 +22,23 @@ fi
 
 # no payload
 if [ "x$data" = "x" ]; then
-	CMD="curl --tlsv1.2 -s -v -k --request ${rtype} --url 'https://${apmhost}:8091/${uri}'  --header 'accept: application/json' --header 'Referer: https://${apmhost}:8091' --header \"authorization: Basic ${auth}\" --header 'content-type: application/json'"
+	echo "apmhost is ${apmhost}"
+	if [[ $apmhost != *"api.ibm.com"* ]]; then
+		# on prem
+		CMD="curl --tlsv1.2 -s -v -k --request ${rtype} --url 'https://${apmhost}:8091/${uri}'  --header 'accept: application/json' --header 'Referer: https://${apmhost}:8091' --header \"authorization: Basic ${auth}\" --header 'content-type: application/json'"
+	else
+		# cloud
+		CMD="curl --tlsv1.2 -s -v -k --request ${rtype} --url 'https://${apmhost}/perfmgmt/run/${uri}'  --header 'accept: application/json' --header 'Referer: https://api.ibm.com' --header \"authorization: Basic ${auth}\" --header 'content-type: application/json' --header 'x-ibm-client-id: ${clientid}' --header 'x-ibm-client-secret: ${clientsecret}' --header 'x-ibm-service-location: ${servicelocation}'"
+	fi
 else
 # with payload
-	CMD="curl --tlsv1.2 -s -v -k --request ${rtype} --url 'https://${apmhost}:8091/${uri}'  --header 'accept: application/json' --header 'Referer: https://${apmhost}:8091' --header \"authorization: Basic ${auth}\" --header 'content-type: application/json' --data '${data}'"
+	if [[ $apmhost != *"api.ibm.com"* ]]; then
+		# on prem
+		CMD="curl --tlsv1.2 -s -v -k --request ${rtype} --url 'https://${apmhost}:8091/${uri}'  --header 'accept: application/json' --header 'Referer: https://${apmhost}:8091' --header \"authorization: Basic ${auth}\" --header 'content-type: application/json' --data '${data}'"
+	else
+		#cloud
+		CMD="curl --tlsv1.2 -s -v -k --request ${rtype} --url 'https://${apmhost}/perfmgmt/run/${uri}'  --header 'accept: application/json' --header 'Referer: https://api.ibm.com' --header \"authorization: Basic ${auth}\" --header 'content-type: application/json'  --header 'x-ibm-client-id: ${clientid}' --header 'x-ibm-client-secret: ${clientsecret}' --header 'x-ibm-service-location: ${servicelocation}' --data '${data}'"
+	fi
 fi
 
 echo "running: ${CMD}"
