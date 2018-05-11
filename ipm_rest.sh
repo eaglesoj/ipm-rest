@@ -22,7 +22,6 @@ fi
 
 # no payload
 if [ "x$data" = "x" ]; then
-	echo "apmhost is ${apmhost}"
 	if [[ $apmhost != *"api.ibm.com"* ]]; then
 		# on prem
 		CMD="curl --tlsv1.2 -s -v -k --request ${rtype} --url 'https://${apmhost}:8091/${uri}'  --header 'accept: application/json' --header 'Referer: https://${apmhost}:8091' --header \"authorization: Basic ${auth}\" --header 'content-type: application/json'"
